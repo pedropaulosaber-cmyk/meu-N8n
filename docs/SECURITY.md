@@ -34,10 +34,13 @@ Legenda: ✅ implementado · 🟡 em andamento · ⬜ pendente · 📋 checklist
 
 | Item | Estado | Onde |
 |---|---|---|
-| Validação Zod em toda fronteira | 🟡 | schemas prontos; aplicação no M3 |
-| Resolução de `{{ }}` sem `eval`/`new Function` | ⬜ | M2 |
-| Timeout por ação | ⬜ | M2 |
-| Falha de ação isolada, sem derrubar o worker | ⬜ | M2 |
+| Validação Zod em toda fronteira | 🟡 | `fieldsToZod` valida config das ações; rotas HTTP no M3 |
+| Resolução de `{{ }}` sem `eval`/`new Function` | ✅ | `context/resolve.ts` — busca por caminho, 9 testes de segurança |
+| Bloqueio de acesso a protótipo e globais no template | ✅ | `__proto__`/`constructor` barrados; raiz desconhecida devolve vazio |
+| Timeout por ação | ✅ | `AbortSignal` repassado aos módulos; testado |
+| Falha de ação isolada, sem derrubar o worker | ✅ | exceção crua vira `ACTION_UNEXPECTED_ERROR`; testado |
+| Retentativa só para erro seguro de repetir | ✅ | credencial inválida não é repetida; testado |
+| URL de requisição HTTP restrita a http(s) | ✅ | bloqueia `file://` interpolado de webhook |
 | Rate limiting no endpoint público de webhook | ⬜ | M3 |
 | Verificação de assinatura de webhook quando o provedor suportar | ⬜ | M3 |
 
@@ -45,8 +48,9 @@ Legenda: ✅ implementado · 🟡 em andamento · ⬜ pendente · 📋 checklist
 
 | Item | Estado | Onde |
 |---|---|---|
-| Mascaramento de campos sensíveis antes de gravar | ⬜ | M2 |
-| Mascaramento de valores que batem com credenciais armazenadas | ⬜ | M2 |
+| Mascaramento de campos sensíveis antes de gravar | ✅ | `security/mask.ts`, por nome de campo e por dado pessoal |
+| Mascaramento de valores que batem com credenciais armazenadas | ✅ | pega o segredo até quando ecoado em mensagem de erro; testado |
+| Headers de autenticação fora do log | ✅ | `redact` no logger do Fastify |
 
 ## Infraestrutura
 
