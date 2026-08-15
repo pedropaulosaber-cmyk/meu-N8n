@@ -1,0 +1,484 @@
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+<style>
+  html, body { margin: 0; padding: 0; background: #08080C; }
+  * { box-sizing: border-box; }
+  a { color: #8E9BFF; text-decoration: none; }
+  a:hover { color: #B3BCFF; }
+  input, select, button { font-family: inherit; }
+  select option { background: #14141C; color: #ECECF2; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #23232F; border-radius: 8px; border: 3px solid #08080C; }
+</style>
+</helmet>
+
+
+
+<div style="display: flex; min-height: 100vh; background: #08080C; color: #ECECF2; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; letter-spacing: -0.01em;">
+
+  <aside style="width: 252px; flex: 0 0 252px; border-right: 1px solid #1A1A24; background: #0B0B11; display: flex; flex-direction: column; padding: 22px 16px 18px; position: sticky; top: 0; height: 100vh;">
+    <div style="display: flex; align-items: center; gap: 11px; padding: 0 8px 24px;">
+      <div style="width: 30px; height: 30px; border-radius: 9px; background: linear-gradient(140deg, #5B6CFF, #A86BFF); display: flex; align-items: center; justify-content: center;">
+        <div style="width: 11px; height: 11px; border-radius: 3px; border: 2px solid #FFFFFF; transform: rotate(45deg);"></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 1px;">
+        <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 15.5px; letter-spacing: -0.02em;">{{ brandName }}</div>
+        <div style="font-size: 10.5px; color: #6E6E85; letter-spacing: 0.04em;">Método CRM · Automações</div>
+      </div>
+    </div>
+
+    <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.13em; color: #5C5C72; padding: 0 10px 10px;">Plataforma</div>
+    <nav style="display: flex; flex-direction: column; gap: 3px;">
+      <button sc-camel-on-click="{{ goAutomations }}" style="{{ navAutomations }}">
+        <svg width="16" height="16" sc-camel-view-box="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 1.5 3 9h4l-1 5.5L13 7H8.5z"></path></svg>
+        <span>Automações</span>
+        <span style="margin-left: auto; font-size: 11px; font-family: 'IBM Plex Mono', monospace; color: #7A7A94;">{{ totalAutomations }}</span>
+      </button>
+      <button sc-camel-on-click="{{ goLogs }}" style="{{ navLogs }}">
+        <svg width="16" height="16" sc-camel-view-box="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2.5 4h11M2.5 8h11M2.5 12h7"></path></svg>
+        <span>Execuções</span>
+      </button>
+      <button sc-camel-on-click="{{ goCredentials }}" style="{{ navCredentials }}">
+        <svg width="16" height="16" sc-camel-view-box="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="5.5" cy="8" r="3"></circle><path d="M8.5 8H14M12 8v2.5"></path></svg>
+        <span>Credenciais</span>
+      </button>
+      <button sc-camel-on-click="{{ goSettings }}" style="{{ navSettings }}">
+        <svg width="16" height="16" sc-camel-view-box="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2.4"></circle><path d="M8 1.6v1.8M8 12.6v1.8M14.4 8h-1.8M3.4 8H1.6M12.5 3.5l-1.3 1.3M4.8 11.2l-1.3 1.3M12.5 12.5l-1.3-1.3M4.8 4.8 3.5 3.5"></path></svg>
+        <span>Configurações</span>
+      </button>
+    </nav>
+
+    <div style="margin-top: auto; display: flex; flex-direction: column; gap: 14px;">
+      <div style="border: 1px solid #1E1E2A; border-radius: 12px; padding: 14px; background: #0E0E15;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <div style="width: 6px; height: 6px; border-radius: 50%; background: #35C98B; box-shadow: 0 0 0 3px rgba(53,201,139,0.14);"></div>
+          <div style="font-size: 12px; font-weight: 600;">Worker online</div>
+        </div>
+        <div style="font-size: 11.5px; color: #6E6E85; line-height: 1.5;">Fila com 3 jobs · latência média 240&nbsp;ms</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; padding: 4px 6px;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: #1D1D28; border: 1px solid #2A2A38; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: #B5B5CC;">RM</div>
+        <div style="display: flex; flex-direction: column;">
+          <div style="font-size: 12.5px; font-weight: 500;">Rafael Moura</div>
+          <div style="font-size: 11px; color: #6E6E85;">Administrador</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+
+    <header style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 30px 36px 24px; border-bottom: 1px solid #15151E;">
+      <div style="display: flex; flex-direction: column; gap: 7px;">
+        <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 600; letter-spacing: -0.03em;">{{ pageTitle }}</h1>
+        <p style="margin: 0; font-size: 13.5px; color: #74748C; max-width: 60ch;">{{ pageSubtitle }}</p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 12px; border: 1px solid #22222E; border-radius: 10px; background: #0E0E15;">
+          <svg width="14" height="14" sc-camel-view-box="0 0 16 16" fill="none" stroke="#6E6E85" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"></circle><path d="m10.5 10.5 3 3"></path></svg>
+          <input value="{{ query }}" sc-camel-on-change="{{ onQuery }}" placeholder="Buscar automação" style="border: none; outline: none; background: transparent; color: #ECECF2; font-size: 13px; width: 168px;">
+        </div>
+        <button sc-camel-on-click="{{ openCreate }}" style="{{ primaryBtn }}">
+          <svg width="14" height="14" sc-camel-view-box="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M8 3v10M3 8h10"></path></svg>
+          Nova Automação
+        </button>
+      </div>
+    </header>
+
+    <sc-if value="{{ isAutomations }}" hint-placeholder-val="{{ true }}">
+      <div style="padding: 26px 36px 44px; display: flex; flex-direction: column; gap: 26px;">
+
+        <sc-if value="{{ showMetrics }}" hint-placeholder-val="{{ true }}">
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
+            <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="4">
+              <div style="border: 1px solid #1B1B25; border-radius: 14px; padding: 18px 18px 16px; background: linear-gradient(170deg, #101017, #0C0C12); display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <div style="font-size: 11.5px; color: #74748C; letter-spacing: 0.01em;">{{ m.label }}</div>
+                  <div style="width: 6px; height: 6px; border-radius: 2px; background: {{ m.dot }};"></div>
+                </div>
+                <div style="display: flex; align-items: baseline; gap: 8px;">
+                  <div style="font-family: 'Space Grotesk', sans-serif; font-size: 29px; font-weight: 600; letter-spacing: -0.035em; line-height: 1;">{{ m.value }}</div>
+                  <div style="font-size: 12px; color: #5F5F76;">{{ m.unit }}</div>
+                </div>
+                <div style="font-size: 11.5px; color: {{ m.deltaColor }};">{{ m.delta }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <div style="border: 1px solid #1B1B25; border-radius: 16px; background: #0C0C12; overflow: visible;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 22px; border-bottom: 1px solid #17171F;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="font-family: 'Space Grotesk', sans-serif; font-size: 14.5px; font-weight: 600;">Automações cadastradas</div>
+              <div style="font-size: 11px; font-family: 'IBM Plex Mono', monospace; color: #6E6E85; border: 1px solid #23232F; border-radius: 20px; padding: 2px 9px;">{{ visibleCount }}</div>
+            </div>
+            <div style="display: flex; gap: 6px;">
+              <sc-for list="{{ filters }}" as="f" hint-placeholder-count="3">
+                <button sc-camel-on-click="{{ f.onClick }}" style="{{ f.style }}">{{ f.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0,2.1fr) minmax(0,1.5fr) 120px minmax(0,1.4fr) 44px; gap: 16px; padding: 11px 22px; border-bottom: 1px solid #17171F; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: #56566B;">
+            <div>Automação</div>
+            <div>Gatilho</div>
+            <div>Status</div>
+            <div>Última execução</div>
+            <div></div>
+          </div>
+
+          <sc-for list="{{ rows }}" as="a" hint-placeholder-count="6">
+            <div style="display: grid; grid-template-columns: minmax(0,2.1fr) minmax(0,1.5fr) 120px minmax(0,1.4fr) 44px; gap: 16px; align-items: center; padding: {{ rowPad }}; border-bottom: 1px solid #14141C; position: relative;">
+              <div style="display: flex; align-items: center; gap: 13px; min-width: 0;">
+                <div style="width: 34px; height: 34px; flex: 0 0 34px; border-radius: 10px; border: 1px solid #242432; background: #131320; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; color: {{ a.accent }};">{{ a.initials }}</div>
+                <div style="min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+                  <div style="font-size: 13.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ a.name }}</div>
+                  <div style="font-size: 11.5px; color: #6A6A82; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ a.desc }}</div>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 9px; min-width: 0;">
+                <div style="width: 22px; height: 22px; flex: 0 0 22px; border-radius: 7px; background: {{ a.trigBg }}; display: flex; align-items: center; justify-content: center;">
+                  <div style="width: 7px; height: 7px; border-radius: {{ a.trigShape }}; background: {{ a.trigColor }};"></div>
+                </div>
+                <span style="font-size: 12.5px; color: #A9A9C0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ a.triggerLabel }}</span>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <button sc-camel-on-click="{{ a.onToggle }}" style="{{ a.trackStyle }}">
+                  <div style="{{ a.knobStyle }}"></div>
+                </button>
+                <span style="font-size: 12px; color: {{ a.statusColor }};">{{ a.statusText }}</span>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <div style="font-size: 12.5px; color: #C8C8DC; font-family: 'IBM Plex Mono', monospace;">{{ a.last }}</div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <div style="width: 5px; height: 5px; border-radius: 50%; background: {{ a.resultColor }};"></div>
+                  <span style="font-size: 11.5px; color: {{ a.resultColor }};">{{ a.resultText }}</span>
+                </div>
+              </div>
+
+              <div style="position: relative; display: flex; justify-content: flex-end;">
+                <button sc-camel-on-click="{{ a.onMenu }}" style="{{ a.menuBtnStyle }}">
+                  <svg width="15" height="15" sc-camel-view-box="0 0 16 16" fill="currentColor"><circle cx="8" cy="3.2" r="1.3"></circle><circle cx="8" cy="8" r="1.3"></circle><circle cx="8" cy="12.8" r="1.3"></circle></svg>
+                </button>
+                <sc-if value="{{ a.menuOpen }}" hint-placeholder-val="{{ false }}">
+                  <div style="position: absolute; top: 34px; right: 0; z-index: 30; width: 176px; padding: 6px; border: 1px solid #262634; border-radius: 12px; background: #14141C; box-shadow: 0 18px 40px rgba(0,0,0,0.55); display: flex; flex-direction: column; gap: 2px;">
+                    <button sc-camel-on-click="{{ a.onEdit }}" style="display: flex; align-items: center; gap: 9px; width: 100%; padding: 8px 10px; border: none; border-radius: 8px; background: transparent; color: #D6D6E6; font-size: 12.5px; text-align: left; cursor: pointer;" style-hover="background: #1E1E2A;">Editar</button>
+                    <button sc-camel-on-click="{{ a.onLogs }}" style="display: flex; align-items: center; gap: 9px; width: 100%; padding: 8px 10px; border: none; border-radius: 8px; background: transparent; color: #D6D6E6; font-size: 12.5px; text-align: left; cursor: pointer;" style-hover="background: #1E1E2A;">Ver logs</button>
+                    <button sc-camel-on-click="{{ a.onDuplicate }}" style="display: flex; align-items: center; gap: 9px; width: 100%; padding: 8px 10px; border: none; border-radius: 8px; background: transparent; color: #D6D6E6; font-size: 12.5px; text-align: left; cursor: pointer;" style-hover="background: #1E1E2A;">Duplicar</button>
+                    <div style="height: 1px; background: #23232F; margin: 4px 2px;"></div>
+                    <button sc-camel-on-click="{{ a.onToggle }}" style="display: flex; align-items: center; gap: 9px; width: 100%; padding: 8px 10px; border: none; border-radius: 8px; background: transparent; color: #FF7A86; font-size: 12.5px; text-align: left; cursor: pointer;" style-hover="background: rgba(255,93,108,0.1);">{{ a.toggleLabel }}</button>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+
+          <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+            <div style="padding: 44px; text-align: center; color: #6A6A82; font-size: 13px;">Nenhuma automação encontrada para esse filtro.</div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isLogs }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 26px 36px 44px; display: flex; flex-direction: column; gap: 18px;">
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <sc-for list="{{ logFilters }}" as="f" hint-placeholder-count="3">
+            <button sc-camel-on-click="{{ f.onClick }}" style="{{ f.style }}">{{ f.label }}</button>
+          </sc-for>
+          <div style="margin-left: auto; font-size: 12px; color: #6A6A82; font-family: 'IBM Plex Mono', monospace;">{{ logCount }} execuções · janela 24h</div>
+        </div>
+
+        <div style="border: 1px solid #1B1B25; border-radius: 16px; background: #0C0C12; overflow: hidden;">
+          <sc-for list="{{ logs }}" as="l" hint-placeholder-count="7">
+            <div style="border-bottom: 1px solid #14141C;">
+              <button sc-camel-on-click="{{ l.onToggle }}" style="display: grid; grid-template-columns: 96px minmax(0,1.6fr) 130px 110px minmax(0,1fr) 24px; gap: 16px; align-items: center; width: 100%; padding: 15px 22px; background: transparent; border: none; cursor: pointer; text-align: left;" style-hover="background: #101018;">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #7E7E98;">{{ l.time }}</span>
+                <span style="font-size: 13px; color: #E4E4F0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ l.name }}</span>
+                <span style="{{ l.pillStyle }}">{{ l.statusText }}</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #8C8CA6;">{{ l.duration }}</span>
+                <span style="font-size: 12px; color: #6A6A82; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ l.summary }}</span>
+                <span style="font-size: 11px; color: #6A6A82; justify-self: end; font-family: 'IBM Plex Mono', monospace;">{{ l.caret }}</span>
+              </button>
+              <sc-if value="{{ l.open }}" hint-placeholder-val="{{ false }}">
+                <div style="padding: 4px 22px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                  <div style="border: 1px solid #1E1E2A; border-radius: 12px; background: #0A0A10; padding: 14px 16px;">
+                    <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: #56566B; margin-bottom: 10px;">Payload processado</div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; line-height: 1.7; color: #9FB6E8; white-space: pre;">{{ l.payload }}</div>
+                  </div>
+                  <div style="border: 1px solid #1E1E2A; border-radius: 12px; background: #0A0A10; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;">
+                    <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: #56566B;">Etapas</div>
+                    <sc-for list="{{ l.steps }}" as="s" hint-placeholder-count="3">
+                      <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 6px; height: 6px; border-radius: 50%; background: {{ s.color }};"></div>
+                        <div style="font-size: 12.5px; color: #C4C4D8;">{{ s.label }}</div>
+                        <div style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #6A6A82;">{{ s.ms }}</div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isPlaceholder }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 26px 36px 44px;">
+        <div style="border: 1px dashed #242430; border-radius: 16px; background: #0C0C12; padding: 64px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;">
+          <div style="width: 40px; height: 40px; border-radius: 12px; background: #14141F; border: 1px solid #242432;"></div>
+          <div style="font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600;">{{ placeholderTitle }}</div>
+          <div style="font-size: 13px; color: #6A6A82; max-width: 44ch;">{{ placeholderText }}</div>
+        </div>
+      </div>
+    </sc-if>
+  </main>
+
+  <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 80; background: rgba(6,6,10,0.72); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 40px;">
+      <div style="width: 620px; max-width: 100%; border: 1px solid #262634; border-radius: 20px; background: #0E0E15; box-shadow: 0 40px 90px rgba(0,0,0,0.6); overflow: hidden;">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; padding: 24px 26px 18px; border-bottom: 1px solid #1A1A24;">
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600; letter-spacing: -0.02em;">{{ modalTitle }}</div>
+            <div style="font-size: 12.5px; color: #6E6E85;">Defina o gatilho e a ação. O fluxo completo pode ser refinado depois.</div>
+          </div>
+          <button sc-camel-on-click="{{ closeModal }}" style="width: 30px; height: 30px; border-radius: 9px; border: 1px solid #242432; background: #14141C; color: #8A8AA2; cursor: pointer; display: flex; align-items: center; justify-content: center;" style-hover="color: #ECECF2; background: #1C1C26;">
+            <svg width="13" height="13" sc-camel-view-box="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"></path></svg>
+          </button>
+        </div>
+
+        <div style="padding: 22px 26px; display: flex; flex-direction: column; gap: 18px;">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label style="font-size: 11.5px; color: #8A8AA2; letter-spacing: 0.01em;">Nome da automação</label>
+            <input value="{{ formName }}" sc-camel-on-change="{{ onFormName }}" placeholder="Ex: WhatsApp → CRM" style="height: 42px; padding: 0 14px; border-radius: 11px; border: 1px solid #262634; background: #0A0A10; color: #ECECF2; font-size: 13.5px; outline: none;" style-focus="border-color: #5B6CFF;">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <label style="font-size: 11.5px; color: #8A8AA2;">Gatilho</label>
+              <sc-raw-select value="{{ formTrigger }}" sc-camel-on-change="{{ onFormTrigger }}" style="height: 42px; padding: 0 12px; border-radius: 11px; border: 1px solid #262634; background: #0A0A10; color: #ECECF2; font-size: 13.5px; outline: none; appearance: none; cursor: pointer;">
+                <option value="WhatsApp">WhatsApp — mensagem recebida</option>
+                <option value="Webhook">Webhook — chamada HTTP</option>
+                <option value="Agendamento">Agendamento — horário fixo</option>
+              </sc-raw-select>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <label style="font-size: 11.5px; color: #8A8AA2;">Ação</label>
+              <sc-raw-select value="{{ formAction }}" sc-camel-on-change="{{ onFormAction }}" style="height: 42px; padding: 0 12px; border-radius: 11px; border: 1px solid #262634; background: #0A0A10; color: #ECECF2; font-size: 13.5px; outline: none; appearance: none; cursor: pointer;">
+                <option value="Salvar no CRM">Salvar no CRM</option>
+                <option value="Gerar PDF">Gerar PDF</option>
+                <option value="Enviar resposta">Enviar resposta</option>
+              </sc-raw-select>
+            </div>
+          </div>
+
+          <div style="border: 1px solid #1E1E2A; border-radius: 14px; background: #0A0A10; padding: 16px 18px; display: flex; flex-direction: column; gap: 13px;">
+            <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: #56566B;">Preview do fluxo</div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 8px; padding: 8px 13px; border-radius: 10px; border: 1px solid #2A2A44; background: #12121F;">
+                <div style="width: 6px; height: 6px; border-radius: 50%; background: #5B6CFF;"></div>
+                <span style="font-size: 12.5px;">{{ formTrigger }}</span>
+              </div>
+              <span style="color: #4A4A60; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">──▶</span>
+              <div style="display: flex; align-items: center; gap: 8px; padding: 8px 13px; border-radius: 10px; border: 1px solid #2A2A44; background: #12121F;">
+                <div style="width: 6px; height: 6px; border-radius: 2px; background: #A86BFF;"></div>
+                <span style="font-size: 12.5px;">{{ formAction }}</span>
+              </div>
+            </div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #7E8FC4; line-height: 1.7; white-space: pre-wrap;">{{ flowPreview }}</div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 26px; border-top: 1px solid #1A1A24; background: #0B0B11;">
+          <div style="font-size: 11.5px; color: #5F5F76;">A automação inicia desativada até o primeiro teste.</div>
+          <div style="display: flex; gap: 10px;">
+            <button sc-camel-on-click="{{ closeModal }}" style="height: 38px; padding: 0 16px; border-radius: 10px; border: 1px solid #262634; background: transparent; color: #B5B5CC; font-size: 13px; cursor: pointer;" style-hover="background: #16161E;">Cancelar</button>
+            <button sc-camel-on-click="{{ saveAutomation }}" style="{{ primaryBtn }}">{{ modalCta }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 90; display: flex; align-items: center; gap: 10px; padding: 11px 18px; border-radius: 12px; border: 1px solid #262634; background: #14141C; box-shadow: 0 18px 40px rgba(0,0,0,0.5); font-size: 13px;">
+      <div style="width: 6px; height: 6px; border-radius: 50%; background: #35C98B;"></div>
+      {{ toast }}
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:940},&quot;brandName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Órbita&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#5B6CFF&quot;,&quot;options&quot;:[&quot;#5B6CFF&quot;,&quot;#7C5CFF&quot;,&quot;#3E8BFF&quot;,&quot;#8B5CF6&quot;],&quot;tsType&quot;:&quot;string&quot;},&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Confortável&quot;,&quot;options&quot;:[&quot;Confortável&quot;,&quot;Compacto&quot;],&quot;tsType&quot;:&quot;string&quot;},&quot;showMetrics&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = {
+    view: 'automations',
+    filter: 'Todas',
+    logFilter: 'Todas',
+    query: '',
+    menuId: null,
+    modalOpen: false,
+    editingId: null,
+    form: { name: '', trigger: 'WhatsApp', action: 'Salvar no CRM' },
+    toast: '',
+    openLogs: {},
+    items: [
+      { id: 1, name: 'WhatsApp → CRM', desc: 'Cria lead e atribui corretor de plantão', trigger: 'WhatsApp', triggerLabel: 'Mensagem recebida', active: true, last: '15/08 · 14:32', result: 'ok' },
+      { id: 2, name: 'Comparador de Financiamento', desc: 'Simula 4 bancos e devolve tabela', trigger: 'Webhook', triggerLabel: 'POST /simulador', active: true, last: '15/08 · 14:09', result: 'ok' },
+      { id: 3, name: 'Follow-up de Visita (D+1)', desc: 'Dispara pesquisa após visita ao imóvel', trigger: 'Agendamento', triggerLabel: 'Diariamente 09:00', active: true, last: '15/08 · 09:00', result: 'ok' },
+      { id: 4, name: 'Sincroniza Portais → Método', desc: 'Importa leads de Viva e ZAP', trigger: 'Agendamento', triggerLabel: 'A cada 30 min', active: false, last: '14/08 · 23:30', result: 'err' },
+      { id: 5, name: 'Gerador de Proposta PDF', desc: 'Monta proposta assinável do imóvel', trigger: 'Webhook', triggerLabel: 'POST /proposta', active: true, last: '15/08 · 13:47', result: 'ok' },
+      { id: 6, name: 'Alerta de Lead Frio', desc: 'Notifica gestor após 72h sem contato', trigger: 'Agendamento', triggerLabel: 'Diariamente 08:00', active: true, last: '15/08 · 08:00', result: 'err' }
+    ],
+    logItems: [
+      { id: 'e1', time: '14:32:07', name: 'WhatsApp → CRM', status: 'ok', duration: '412 ms', summary: 'Lead #8842 criado', payload: '{\n  "from": "+55 11 98812-4471",\n  "message": "Tenho interesse no ap. 402",\n  "unidade": "Residencial Aurora · 402",\n  "lead_id": 8842\n}', steps: [ { label: 'Recebe mensagem', ms: '38 ms', color: '#35C98B' }, { label: 'Classifica intenção', ms: '186 ms', color: '#35C98B' }, { label: 'Grava no Método CRM', ms: '188 ms', color: '#35C98B' } ] },
+      { id: 'e2', time: '14:29:51', name: 'Comparador de Financiamento', status: 'ok', duration: '1,8 s', summary: '4 bancos comparados', payload: '{\n  "valor_imovel": 620000,\n  "entrada": 124000,\n  "prazo_meses": 360,\n  "bancos": ["CEF", "Itau", "Bradesco", "Santander"]\n}', steps: [ { label: 'Valida payload', ms: '22 ms', color: '#35C98B' }, { label: 'Consulta tabelas', ms: '1,4 s', color: '#35C98B' }, { label: 'Devolve comparativo', ms: '380 ms', color: '#35C98B' } ] },
+      { id: 'e3', time: '14:12:03', name: 'Alerta de Lead Frio', status: 'err', duration: '2,4 s', summary: 'Timeout no envio de e-mail', payload: '{\n  "lead_id": 8511,\n  "ultimo_contato": "12/08 09:14",\n  "erro": "SMTP timeout after 2000ms"\n}', steps: [ { label: 'Seleciona leads', ms: '120 ms', color: '#35C98B' }, { label: 'Monta alerta', ms: '90 ms', color: '#35C98B' }, { label: 'Envia e-mail', ms: 'timeout', color: '#FF5D6C' } ] },
+      { id: 'e4', time: '13:47:29', name: 'Gerador de Proposta PDF', status: 'ok', duration: '3,1 s', summary: 'proposta-8829.pdf', payload: '{\n  "proposta_id": 8829,\n  "comprador": "Ana Ribeiro",\n  "valor": 585000,\n  "arquivo": "proposta-8829.pdf"\n}', steps: [ { label: 'Carrega dados do imóvel', ms: '240 ms', color: '#35C98B' }, { label: 'Renderiza PDF', ms: '2,5 s', color: '#35C98B' }, { label: 'Anexa ao negócio', ms: '360 ms', color: '#35C98B' } ] },
+      { id: 'e5', time: '13:30:00', name: 'Sincroniza Portais → Método', status: 'err', duration: '5,0 s', summary: 'Credencial ZAP expirada', payload: '{\n  "portal": "ZAP Imóveis",\n  "status": 401,\n  "erro": "credential_expired",\n  "importados": 0\n}', steps: [ { label: 'Autentica portal', ms: '5,0 s', color: '#FF5D6C' }, { label: 'Importa leads', ms: '—', color: '#3A3A4A' }, { label: 'Deduplica', ms: '—', color: '#3A3A4A' } ] },
+      { id: 'e6', time: '12:58:44', name: 'WhatsApp → CRM', status: 'ok', duration: '389 ms', summary: 'Lead #8840 atualizado', payload: '{\n  "from": "+55 11 99640-2210",\n  "message": "Podemos visitar sábado?",\n  "lead_id": 8840\n}', steps: [ { label: 'Recebe mensagem', ms: '31 ms', color: '#35C98B' }, { label: 'Classifica intenção', ms: '171 ms', color: '#35C98B' }, { label: 'Atualiza negócio', ms: '187 ms', color: '#35C98B' } ] },
+      { id: 'e7', time: '09:00:02', name: 'Follow-up de Visita (D+1)', status: 'ok', duration: '6,7 s', summary: '38 mensagens enviadas', payload: '{\n  "visitas_ontem": 38,\n  "enviadas": 38,\n  "respostas_esperadas": "24h"\n}', steps: [ { label: 'Lista visitas', ms: '410 ms', color: '#35C98B' }, { label: 'Monta mensagens', ms: '1,2 s', color: '#35C98B' }, { label: 'Dispara envio', ms: '5,1 s', color: '#35C98B' } ] }
+    ]
+  };
+
+  componentDidMount() {
+    this._close = (e) => { if (!e.target.closest || !e.target.closest('[data-menu]')) this.setState({ menuId: null }); };
+    document.addEventListener('click', this._close);
+  }
+  componentWillUnmount() { document.removeEventListener('click', this._close); }
+
+  flash(msg) {
+    this.setState({ toast: msg });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => this.setState({ toast: '' }), 2200);
+  }
+
+  renderVals() {
+    const ACC = this.props.accentColor || '#5B6CFF';
+    const dense = (this.props.density || 'Confortável') === 'Compacto';
+    const rowPad = dense ? '13px 22px' : '18px 22px';
+    const s = this.state;
+
+    const navStyle = (on) => 'display: flex; align-items: center; gap: 11px; width: 100%; padding: 9px 10px; border: none; border-radius: 10px; cursor: pointer; font-family: inherit; font-size: 13.5px; font-weight: ' + (on ? '500' : '400') + '; text-align: left; background: ' + (on ? 'rgba(91,108,255,0.13)' : 'transparent') + '; color: ' + (on ? '#DCDCF5' : '#8A8AA2') + '; box-shadow: ' + (on ? 'inset 0 0 0 1px rgba(91,108,255,0.28)' : 'none') + ';';
+
+    const chip = (on) => 'padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; font-family: inherit; border: 1px solid ' + (on ? 'rgba(91,108,255,0.4)' : '#23232F') + '; background: ' + (on ? 'rgba(91,108,255,0.14)' : 'transparent') + '; color: ' + (on ? '#C9CDFF' : '#8A8AA2') + ';';
+
+    const trig = {
+      WhatsApp: { bg: 'rgba(53,201,139,0.13)', color: '#35C98B', shape: '50%' },
+      Webhook: { bg: 'rgba(168,107,255,0.13)', color: '#A86BFF', shape: '2px' },
+      Agendamento: { bg: 'rgba(243,179,61,0.13)', color: '#F3B33D', shape: '50%' }
+    };
+
+    const q = s.query.trim().toLowerCase();
+    const filtered = s.items.filter((a) => {
+      if (s.filter === 'Ativas' && !a.active) return false;
+      if (s.filter === 'Com erro' && a.result !== 'err') return false;
+      if (q && a.name.toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    });
+
+    const rows = filtered.map((a) => {
+      const t = trig[a.trigger] || trig.Webhook;
+      const initials = a.name.replace(/[^A-Za-zÀ-ú ]/g, ' ').trim().split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+      return {
+        ...a, initials, accent: t.color, trigBg: t.bg, trigColor: t.color, trigShape: t.shape,
+        statusText: a.active ? 'Ativo' : 'Inativo',
+        statusColor: a.active ? '#35C98B' : '#6A6A82',
+        resultText: a.result === 'ok' ? 'Sucesso' : 'Erro na execução',
+        resultColor: a.result === 'ok' ? '#5F8F78' : '#FF5D6C',
+        toggleLabel: a.active ? 'Desativar' : 'Ativar',
+        menuOpen: s.menuId === a.id,
+        trackStyle: 'width: 34px; height: 19px; flex: 0 0 34px; border-radius: 20px; border: none; cursor: pointer; padding: 2px; display: flex; justify-content: ' + (a.active ? 'flex-end' : 'flex-start') + '; background: ' + (a.active ? '#2E9E72' : '#262632') + '; transition: background .18s ease;',
+        knobStyle: 'width: 15px; height: 15px; border-radius: 50%; background: ' + (a.active ? '#E8FFF5' : '#7A7A94') + '; transition: all .18s ease;',
+        menuBtnStyle: 'width: 30px; height: 30px; border-radius: 9px; border: 1px solid ' + (s.menuId === a.id ? '#2E2E40' : 'transparent') + '; background: ' + (s.menuId === a.id ? '#16161E' : 'transparent') + '; color: #7A7A94; cursor: pointer; display: flex; align-items: center; justify-content: center;',
+        onToggle: (e) => { e.stopPropagation(); this.setState((st) => ({ items: st.items.map((i) => i.id === a.id ? { ...i, active: !i.active } : i), menuId: null })); this.flash(a.active ? a.name + ' desativada' : a.name + ' ativada'); },
+        onMenu: (e) => { e.stopPropagation(); this.setState({ menuId: s.menuId === a.id ? null : a.id }); },
+        onEdit: (e) => { e.stopPropagation(); this.setState({ modalOpen: true, editingId: a.id, menuId: null, form: { name: a.name, trigger: a.trigger, action: 'Salvar no CRM' } }); },
+        onLogs: (e) => { e.stopPropagation(); this.setState({ view: 'logs', menuId: null }); },
+        onDuplicate: (e) => { e.stopPropagation(); this.setState((st) => ({ items: st.items.concat([{ ...a, id: Date.now(), name: a.name + ' (cópia)', active: false, last: '—', result: 'ok' }]), menuId: null })); this.flash('Automação duplicada'); }
+      };
+    });
+
+    const mkFilters = (list, current, apply) => list.map((label) => ({ label, style: chip(current === label), onClick: () => apply(label) }));
+
+    const logs = s.logItems.filter((l) => s.logFilter === 'Todas' || (s.logFilter === 'Sucesso' ? l.status === 'ok' : l.status === 'err')).map((l) => ({
+      ...l,
+      statusText: l.status === 'ok' ? 'Sucesso' : 'Erro',
+      caret: s.openLogs[l.id] ? '▾' : '▸',
+      open: !!s.openLogs[l.id],
+      pillStyle: 'display: inline-flex; align-items: center; justify-content: center; padding: 4px 11px; border-radius: 20px; font-size: 11.5px; justify-self: start; border: 1px solid ' + (l.status === 'ok' ? 'rgba(53,201,139,0.3)' : 'rgba(255,93,108,0.3)') + '; background: ' + (l.status === 'ok' ? 'rgba(53,201,139,0.1)' : 'rgba(255,93,108,0.1)') + '; color: ' + (l.status === 'ok' ? '#4FD3A0' : '#FF7A86') + ';',
+      onToggle: () => this.setState((st) => ({ openLogs: { ...st.openLogs, [l.id]: !st.openLogs[l.id] } }))
+    }));
+
+    const titles = {
+      automations: ['Automações', 'Fluxos ativos entre WhatsApp, portais e o Método CRM. Cada automação roda de forma isolada e registra suas execuções.'],
+      logs: ['Execuções', 'Histórico cronológico das últimas execuções. Expanda uma linha para ver o payload processado e o tempo de cada etapa.'],
+      credentials: ['Credenciais', 'Chaves e conexões usadas pelos fluxos.'],
+      settings: ['Configurações', 'Preferências da conta e do worker de execução.']
+    };
+    const t = titles[s.view];
+
+    return {
+      brandName: this.props.brandName || 'Órbita',
+      showMetrics: this.props.showMetrics !== false,
+      rowPad,
+      pageTitle: t[0], pageSubtitle: t[1],
+      isAutomations: s.view === 'automations',
+      isLogs: s.view === 'logs',
+      isPlaceholder: s.view === 'credentials' || s.view === 'settings',
+      placeholderTitle: s.view === 'credentials' ? 'Nenhuma credencial expirando' : 'Configurações do workspace',
+      placeholderText: s.view === 'credentials' ? '6 conexões ativas: WhatsApp Cloud API, Método CRM, ZAP Imóveis, Viva Real, SMTP e Storage.' : 'Fuso horário, política de retentativa e limites de execução por minuto.',
+      totalAutomations: s.items.length,
+      visibleCount: filtered.length + ' de ' + s.items.length,
+      noResults: filtered.length === 0,
+      rows,
+      logs, logCount: s.logItems.length,
+      filters: mkFilters(['Todas', 'Ativas', 'Com erro'], s.filter, (f) => this.setState({ filter: f })),
+      logFilters: mkFilters(['Todas', 'Sucesso', 'Erro'], s.logFilter, (f) => this.setState({ logFilter: f })),
+      metrics: [
+        { label: 'Automações ativas', value: s.items.filter((i) => i.active).length, unit: 'de ' + s.items.length, dot: ACC, delta: '+2 nesta semana', deltaColor: '#5F8F78' },
+        { label: 'Execuções · 24h', value: '1.284', unit: 'runs', dot: '#A86BFF', delta: '+18% vs. ontem', deltaColor: '#5F8F78' },
+        { label: 'Taxa de sucesso', value: '98,4', unit: '%', dot: '#35C98B', delta: '21 falhas registradas', deltaColor: '#8A6A6A' },
+        { label: 'Próxima execução', value: '15:00', unit: 'em 12 min', dot: '#F3B33D', delta: 'Sincroniza Portais → Método', deltaColor: '#6A6A82' }
+      ],
+      query: s.query,
+      onQuery: (e) => this.setState({ query: e.target.value }),
+      goAutomations: () => this.setState({ view: 'automations' }),
+      goLogs: () => this.setState({ view: 'logs' }),
+      goCredentials: () => this.setState({ view: 'credentials' }),
+      goSettings: () => this.setState({ view: 'settings' }),
+      navAutomations: navStyle(s.view === 'automations'),
+      navLogs: navStyle(s.view === 'logs'),
+      navCredentials: navStyle(s.view === 'credentials'),
+      navSettings: navStyle(s.view === 'settings'),
+      primaryBtn: 'display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px; border: none; border-radius: 10px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 500; color: #FFFFFF; background: linear-gradient(135deg, ' + ACC + ', #8B5CF6); box-shadow: 0 6px 18px rgba(91,108,255,0.28);',
+      modalOpen: s.modalOpen,
+      modalTitle: s.editingId ? 'Editar automação' : 'Nova automação',
+      modalCta: s.editingId ? 'Salvar alterações' : 'Criar automação',
+      formName: s.form.name, formTrigger: s.form.trigger, formAction: s.form.action,
+      flowPreview: 'quando  ' + s.form.trigger.toLowerCase() + '  →  executar  ' + s.form.action.toLowerCase() + '\nfalha  →  3 retentativas  →  notificar gestor',
+      onFormName: (e) => this.setState((st) => ({ form: { ...st.form, name: e.target.value } })),
+      onFormTrigger: (e) => this.setState((st) => ({ form: { ...st.form, trigger: e.target.value } })),
+      onFormAction: (e) => this.setState((st) => ({ form: { ...st.form, action: e.target.value } })),
+      openCreate: () => this.setState({ modalOpen: true, editingId: null, form: { name: '', trigger: 'WhatsApp', action: 'Salvar no CRM' } }),
+      closeModal: () => this.setState({ modalOpen: false }),
+      saveAutomation: () => {
+        const f = this.state.form;
+        const name = f.name.trim() || 'Automação sem nome';
+        this.setState((st) => st.editingId
+          ? { items: st.items.map((i) => i.id === st.editingId ? { ...i, name, trigger: f.trigger, triggerLabel: f.trigger === 'Agendamento' ? 'Horário fixo' : f.trigger === 'Webhook' ? 'Chamada HTTP' : 'Mensagem recebida' } : i), modalOpen: false }
+          : { items: st.items.concat([{ id: Date.now(), name, desc: f.trigger + ' → ' + f.action, trigger: f.trigger, triggerLabel: f.trigger === 'Agendamento' ? 'Horário fixo' : f.trigger === 'Webhook' ? 'Chamada HTTP' : 'Mensagem recebida', active: false, last: '—', result: 'ok' }]), modalOpen: false });
+        this.flash(this.state.editingId ? 'Alterações salvas' : 'Automação criada');
+      },
+      toast: s.toast
+    };
+  }
+}
+</script>
