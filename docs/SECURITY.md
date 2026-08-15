@@ -9,20 +9,25 @@ Legenda: ✅ implementado · 🟡 em andamento · ⬜ pendente · 📋 checklist
 
 | Item | Estado | Onde |
 |---|---|---|
-| Hash de senha forte (argon2id) | ⬜ | M1 |
-| Rate limiting em tentativas de login | ⬜ | M1 |
-| JWT de vida curta (15 min) | ⬜ | M1 |
-| Refresh token rotativo, hasheado e revogável | ⬜ | M1 |
+| Hash de senha forte (argon2id) | ✅ | `src/auth/passwords.ts` — perfil OWASP 19 MiB/t=2 |
+| Rate limiting em tentativas de login | ✅ | 5/min por IP em `src/routes/auth.ts` |
+| JWT de vida curta (15 min) | ✅ | `ACCESS_TOKEN_TTL`, assinado com jose |
+| Refresh token rotativo, hasheado e revogável | ✅ | `src/auth/tokens.ts` |
+| Detecção de reuso de refresh token | ✅ | reapresentar token rotacionado revoga a família inteira |
+| Revogação em bloco por corte temporal | ✅ | `users.tokens_valid_from`; troca de senha derruba as sessões |
+| Resposta idêntica para e-mail inexistente e senha errada | ✅ | `fakeVerify()` iguala o tempo, evitando enumeração de contas |
 | Política de senha mínima | ✅ | `packages/shared/src/auth.ts` |
-| Todo endpoint administrativo autenticado | ⬜ | M3 |
+| Todo endpoint administrativo autenticado | 🟡 | `requireAuth` pronto; aplicado às demais rotas no M3 |
 
 ## Credenciais
 
 | Item | Estado | Onde |
 |---|---|---|
-| Criptografia AES-256-GCM | ⬜ | M1 |
-| Chave de criptografia fora do banco e do repositório | ✅ | `ENCRYPTION_KEY` no `.env` |
-| Suporte a rotação de chave (`key_version`) | ⬜ | M1 |
+| Criptografia AES-256-GCM | ✅ | `src/crypto/credentials.ts`, com testes |
+| Chave de criptografia fora do banco e do repositório | ✅ | `ENCRYPTION_KEY` no `.env`, validada no boot |
+| Suporte a rotação de chave (`key_version`) | ✅ | coluna `credentials.key_version` |
+| Ciphertext amarrado à credencial (AAD) | ✅ | mover a linha cifrada no banco quebra a decifragem |
+| Detecção de adulteração | ✅ | auth tag do GCM; testado |
 | Segredo nunca retornado ao painel (só prévia mascarada) | ✅ | `credentialPublicSchema` sem campo `data` |
 
 ## Entrada e execução
