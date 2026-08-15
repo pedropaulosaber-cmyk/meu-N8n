@@ -58,6 +58,17 @@ docs/        Plano de fase, receita de integração e checklist de segurança
 | [`docs/SECURITY.md`](docs/SECURITY.md) | Checklist de segurança, item a item |
 | [`docs/DEPLOY.md`](docs/DEPLOY.md) | Subir em VPS com HTTPS |
 
+## Produção
+
+```bash
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+Sobe Postgres, Redis, API, worker, painel e a rotina de backup atrás do
+Caddy, que cuida do certificado HTTPS sozinho. O passo a passo completo —
+incluindo firewall, SSH por chave e DNS — está em
+[`docs/DEPLOY.md`](docs/DEPLOY.md).
+
 ## Custos
 
 Zero licenciamento — toda a stack é open source e self-hosted. Os únicos

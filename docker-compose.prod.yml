@@ -1,0 +1,130 @@
+# Stack completa de produção.
+#
+#   docker compose -f docker-compose.prod.yml up -d --build
+#
+# Ver docs/DEPLOY.md para o passo a passo, incluindo o que precisa ser
+# feito no servidor antes (firewall, SSH por chave, DNS).
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      POSTGRES_DB: ${POSTGRES_DB:?}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    # Sem `ports`: o banco só é alcançável pela rede interna do Compose.
+    # Nem o loopback do host precisa enxergá-lo em produção.
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    security_opt:
+      - no-new-privileges:true
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --save 60 1 --appendonly yes --loglevel warning
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    security_opt:
+      - no-new-privileges:true
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    command: ['pnpm', '--filter', '@orbita/api', 'start']
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      REDIS_URL: redis://redis:6379
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:?}
+      JWT_SECRET: ${JWT_SECRET:?}
+      PUBLIC_API_URL: https://${ORBITA_DOMAIN:?}
+      WEB_ORIGIN: https://${ORBITA_DOMAIN}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      EXECUTION_RETENTION_DAYS: ${EXECUTION_RETENTION_DAYS:-90}
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    # Idem: sem `ports`. Só o Caddy alcança a API, pela rede interna.
+    security_opt:
+      - no-new-privileges:true
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    command: ['pnpm', '--filter', '@orbita/worker', 'start']
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      REDIS_URL: redis://redis:6379
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:?}
+      JWT_SECRET: ${JWT_SECRET:?}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      WORKER_CONCURRENCY: ${WORKER_CONCURRENCY:-5}
+      EXECUTION_RETENTION_DAYS: ${EXECUTION_RETENTION_DAYS:-90}
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    # Espera os jobs em andamento terminarem antes de morrer, para não
+    # deixar execução pela metade sem registro no histórico.
+    stop_grace_period: 60s
+    security_opt:
+      - no-new-privileges:true
+
+  caddy:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    restart: unless-stopped
+    environment:
+      ORBITA_DOMAIN: ${ORBITA_DOMAIN:?}
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      # Persistem os certificados: sem isto, cada recriação do container
+      # pede certificado novo e esbarra no limite de emissão do Let's Encrypt.
+      - caddy-data:/data
+      - caddy-config:/config
+      - caddy-logs:/var/log/caddy
+    depends_on:
+      - api
+
+  # Backup do banco. Roda em loop próprio em vez de cron do host, para a
+  # rotina viver junto da stack e subir com ela.
+  backup:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD:?}
+      POSTGRES_USER: ${POSTGRES_USER:?}
+      POSTGRES_DB: ${POSTGRES_DB:?}
+      BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-14}
+    volumes:
+      - ./backups:/backups
+      - ./scripts/backup.sh:/usr/local/bin/backup.sh:ro
+    entrypoint: ['/bin/sh', '/usr/local/bin/backup.sh']
+    depends_on:
+      postgres: { condition: service_healthy }
+
+volumes:
+  postgres-data:
+  redis-data:
+  caddy-data:
+  caddy-config:
+  caddy-logs:

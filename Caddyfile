@@ -1,0 +1,59 @@
+# ─────────────────────────────────────────────────────────────────────
+#  Caddy — TLS automático e roteamento
+# ─────────────────────────────────────────────────────────────────────
+#
+# O Caddy obtém e renova o certificado Let's Encrypt sozinho, desde que o
+# domínio aponte para o servidor e as portas 80 e 443 estejam abertas.
+# É o que atende ao requisito "HTTPS obrigatório, sem exceção" sem
+# depender de alguém lembrar de renovar certificado.
+#
+# Substitua ORBITA_DOMAIN pelo seu domínio no .env de produção.
+
+{$ORBITA_DOMAIN} {
+	# Cabeçalhos de segurança aplicados a tudo que sai daqui.
+	header {
+		# Força HTTPS por 2 anos, inclusive em subdomínios.
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		# O painel não usa recurso externo além das fontes do Google.
+		Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+		# Não anunciar a versão do servidor.
+		-Server
+	}
+
+	# ── API administrativa ───────────────────────────────────────────
+	handle /api/* {
+		reverse_proxy api:3001
+	}
+
+	# ── Webhooks públicos ────────────────────────────────────────────
+	# Mesmo destino, mas separado de propósito: deixa explícito no arquivo
+	# quais caminhos são acessíveis sem autenticação, e dá um lugar óbvio
+	# para pôr limites extras se algum dia um webhook levar tráfego pesado.
+	handle /hooks/* {
+		reverse_proxy api:3001
+	}
+
+	handle /health {
+		reverse_proxy api:3001
+	}
+
+	# ── Painel ───────────────────────────────────────────────────────
+	handle {
+		root * /srv
+		encode gzip zstd
+		# SPA: qualquer rota desconhecida devolve o index, que o React
+		# resolve no cliente.
+		try_files {path} /index.html
+		file_server
+	}
+
+	log {
+		output file /var/log/caddy/access.log {
+			roll_size 10MiB
+			roll_keep 5
+		}
+	}
+}

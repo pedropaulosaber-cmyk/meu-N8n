@@ -1,0 +1,20 @@
+# Painel estático servido pelo Caddy.
+# Build separado do backend: o resultado é um punhado de arquivos, sem
+# Node em produção e sem superfície de ataque de runtime.
+
+FROM node:22-alpine AS build
+WORKDIR /app
+RUN corepack enable
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/web/package.json ./apps/web/
+COPY packages/shared/package.json ./packages/shared/
+RUN pnpm install --frozen-lockfile --filter @orbita/web...
+
+COPY . .
+RUN pnpm --filter @orbita/web build
+
+# ── Runtime: só os estáticos ─────────────────────────────────────────
+FROM caddy:2-alpine AS runtime
+COPY --from=build /app/apps/web/dist /srv
+COPY Caddyfile /etc/caddy/Caddyfile
