@@ -91,12 +91,27 @@ export const integrationCatalogItemSchema = z.object({
 });
 export type IntegrationCatalogItem = z.infer<typeof integrationCatalogItemSchema>;
 
-/** Status derivado, usado para o selo colorido do card na aba Integrações. */
-export type IntegrationStatus = 'connected' | 'pending' | 'no_credential_needed';
+/**
+ * Status derivado, usado para o selo colorido do card na aba Integrações.
+ *
+ * `optional` existe para integrações que aceitam credencial sem exigi-la —
+ * o webhook, por exemplo, só precisa de segredo se a verificação HMAC
+ * estiver ligada. Sem esse caso, o card mostraria "Sem credencial" ao
+ * lado de um botão "Conectar", que é contraditório.
+ */
+export type IntegrationStatus =
+  | 'connected'
+  | 'pending'
+  | 'optional'
+  | 'no_credential_needed';
 
 export function resolveIntegrationStatus(
-  item: Pick<IntegrationCatalogItem, 'requiresCredential' | 'credentialCount'>,
+  item: Pick<
+    IntegrationCatalogItem,
+    'requiresCredential' | 'credentialCount' | 'credentialFields'
+  >,
 ): IntegrationStatus {
-  if (!item.requiresCredential) return 'no_credential_needed';
-  return item.credentialCount > 0 ? 'connected' : 'pending';
+  if (item.credentialCount > 0) return 'connected';
+  if (item.requiresCredential) return 'pending';
+  return item.credentialFields.length > 0 ? 'optional' : 'no_credential_needed';
 }

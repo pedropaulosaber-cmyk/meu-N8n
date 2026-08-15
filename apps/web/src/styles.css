@@ -1,0 +1,95 @@
+@import 'tailwindcss';
+
+/**
+ * Design tokens extraídos de design/Painel de Automações.dc.html.
+ *
+ * O design original usava estilos inline com cores literais repetidas.
+ * Aqui elas viram tokens nomeados: mudar a identidade visual passa a ser
+ * editar este bloco, em vez de caçar hex espalhado pelos componentes.
+ */
+@theme {
+  /* Superfícies, do fundo mais profundo ao mais elevado */
+  --color-void: #08080c;
+  --color-surface: #0b0b11;
+  --color-panel: #0c0c12;
+  --color-raised: #0e0e15;
+  --color-inset: #0a0a10;
+  --color-overlay: #14141c;
+  --color-hover: #16161e;
+
+  /* Bordas, da mais sutil à mais marcada */
+  --color-line: #14141c;
+  --color-line-soft: #17171f;
+  --color-line-mid: #1b1b25;
+  --color-line-strong: #262634;
+
+  /* Texto */
+  --color-ink: #ececf2;
+  --color-ink-soft: #c8c8dc;
+  --color-ink-muted: #8a8aa2;
+  --color-ink-dim: #6e6e85;
+  --color-ink-faint: #56566b;
+
+  /* Semânticas */
+  --color-accent: #5b6cff;
+  --color-accent-alt: #a86bff;
+  --color-success: #35c98b;
+  --color-danger: #ff5d6c;
+  --color-warning: #f3b33d;
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  background: var(--color-void);
+  min-height: 100vh;
+}
+
+body {
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input,
+select,
+button,
+textarea {
+  font-family: inherit;
+}
+
+select option {
+  background: var(--color-overlay);
+  color: var(--color-ink);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #23232f;
+  border-radius: 8px;
+  border: 3px solid var(--color-void);
+}
+
+/* Respeita quem pediu menos movimento no sistema. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

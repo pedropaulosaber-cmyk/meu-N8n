@@ -47,6 +47,23 @@ Legenda: ✅ implementado · 🟡 em andamento · ⬜ pendente · 📋 checklist
 | Headers sensíveis não entram no histórico | ✅ | allowlist em `pickSafeHeaders` |
 | Limite de tamanho de corpo | ✅ | 1 MiB no Fastify |
 
+## Painel (frontend)
+
+| Item | Estado | Onde |
+|---|---|---|
+| Access token só em memória (morre ao fechar a aba) | ✅ | `apps/web/src/lib/api.ts` |
+| Refresh concorrente compartilha uma promise | ✅ | evita que 2 renovações simultâneas disparem a detecção de reuso |
+| Segredo nunca renderizado — só a prévia mascarada | ✅ | a API não devolve `data`, então o painel não tem o que vazar |
+| Refresh token em `localStorage` em vez de cookie httpOnly | 🟡 | ver nota abaixo |
+
+**Nota sobre o `localStorage`.** Cookie `httpOnly` seria imune a XSS e é a
+escolha ideal. Hoje o backend devolve os tokens no corpo da resposta, e a
+combinação atual já limita bastante o estrago: o access token (o que dá
+acesso imediato) só existe em memória, e o refresh é rotativo com detecção
+de reuso — um roubo derruba a sessão inteira na primeira renovação.
+Migrar para cookie `httpOnly` + CSRF token fica como melhoria de uma fase
+posterior.
+
 ## Logs
 
 | Item | Estado | Onde |
