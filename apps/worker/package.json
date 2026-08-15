@@ -1,0 +1,22 @@
+{
+  "name": "@orbita/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "start": "tsx src/main.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@orbita/api": "workspace:*",
+    "@orbita/engine": "workspace:*",
+    "@orbita/shared": "workspace:*",
+    "bullmq": "^5.34.5",
+    "drizzle-orm": "^0.38.3",
+    "ioredis": "^5.4.2",
+    "pino": "^9.5.0",
+    "postgres": "^3.4.5"
+  }
+}

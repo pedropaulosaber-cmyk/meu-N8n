@@ -17,7 +17,7 @@ Legenda: ✅ implementado · 🟡 em andamento · ⬜ pendente · 📋 checklist
 | Revogação em bloco por corte temporal | ✅ | `users.tokens_valid_from`; troca de senha derruba as sessões |
 | Resposta idêntica para e-mail inexistente e senha errada | ✅ | `fakeVerify()` iguala o tempo, evitando enumeração de contas |
 | Política de senha mínima | ✅ | `packages/shared/src/auth.ts` |
-| Todo endpoint administrativo autenticado | 🟡 | `requireAuth` pronto; aplicado às demais rotas no M3 |
+| Todo endpoint administrativo autenticado | ✅ | hook no escopo do plugin: rota nova nasce protegida |
 
 ## Credenciais
 
@@ -34,15 +34,18 @@ Legenda: ✅ implementado · 🟡 em andamento · ⬜ pendente · 📋 checklist
 
 | Item | Estado | Onde |
 |---|---|---|
-| Validação Zod em toda fronteira | 🟡 | `fieldsToZod` valida config das ações; rotas HTTP no M3 |
+| Validação Zod em toda fronteira | ✅ | schemas nas rotas + `fieldsToZod` nos módulos |
 | Resolução de `{{ }}` sem `eval`/`new Function` | ✅ | `context/resolve.ts` — busca por caminho, 9 testes de segurança |
 | Bloqueio de acesso a protótipo e globais no template | ✅ | `__proto__`/`constructor` barrados; raiz desconhecida devolve vazio |
 | Timeout por ação | ✅ | `AbortSignal` repassado aos módulos; testado |
 | Falha de ação isolada, sem derrubar o worker | ✅ | exceção crua vira `ACTION_UNEXPECTED_ERROR`; testado |
 | Retentativa só para erro seguro de repetir | ✅ | credencial inválida não é repetida; testado |
 | URL de requisição HTTP restrita a http(s) | ✅ | bloqueia `file://` interpolado de webhook |
-| Rate limiting no endpoint público de webhook | ⬜ | M3 |
-| Verificação de assinatura de webhook quando o provedor suportar | ⬜ | M3 |
+| Rate limiting no endpoint público de webhook | ✅ | 60/min **por token**, não por IP |
+| Verificação de assinatura de webhook quando o provedor suportar | ✅ | HMAC sobre o corpo cru, comparação em tempo constante |
+| Token de webhook rotacionável se a URL vazar | ✅ | `POST /api/automations/:id/rotate-webhook` |
+| Headers sensíveis não entram no histórico | ✅ | allowlist em `pickSafeHeaders` |
+| Limite de tamanho de corpo | ✅ | 1 MiB no Fastify |
 
 ## Logs
 

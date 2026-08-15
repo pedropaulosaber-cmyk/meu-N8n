@@ -4,6 +4,9 @@ import cors from '@fastify/cors';
 import rateLimit from '@fastify/rate-limit';
 import { createDb, type Database } from './db/client.js';
 import { authRoutes } from './routes/auth.js';
+import { adminRoutes } from './routes/admin.js';
+import { webhookRoutes } from './routes/webhooks.js';
+import { createExecutionQueue, createRedis } from './queue/index.js';
 import type { Env } from './env.js';
 
 export interface BuildServerOptions {
@@ -18,6 +21,9 @@ export async function buildServer({
 }: BuildServerOptions): Promise<{ app: FastifyInstance; db: Database; close: () => Promise<void> }> {
   const owned = injectedDb ? null : createDb(env.DATABASE_URL);
   const db = injectedDb ?? owned!.db;
+
+  const redis = createRedis(env.REDIS_URL);
+  const queue = createExecutionQueue(redis);
 
   const app = Fastify({
     logger: {
@@ -68,6 +74,15 @@ export async function buildServer({
     prefix: '/api/auth',
   });
 
+  await app.register(async (instance) => adminRoutes(instance, { db, env, queue }), {
+    prefix: '/api',
+  });
+
+  // Rota pública — autenticada por token na URL + HMAC, não por sessão.
+  await app.register(async (instance) => webhookRoutes(instance, { db, env, queue }), {
+    prefix: '/hooks',
+  });
+
   /**
    * Handler de erro único.
    *
@@ -102,6 +117,8 @@ export async function buildServer({
     db,
     close: async () => {
       await app.close();
+      await queue.close();
+      redis.disconnect();
       if (owned) await owned.close();
     },
   };
