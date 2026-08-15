@@ -20,6 +20,11 @@ build/
 backups/
 *.dump
 *.sql.gz
+# Persistência do Redis quando rodado fora do container, direto no projeto.
+# É estado de execução (fila do BullMQ), não código.
+dump.rdb
+appendonly.aof
+appendonlydir/
 
 # ── Logs ──────────────────────────────────────────────────────────────
 logs/
