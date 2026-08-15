@@ -1,0 +1,30 @@
+{
+  "name": "orbita",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Plataforma própria de criação de agentes e automações",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter \"./apps/*\" dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "audit": "pnpm audit --audit-level=high",
+    "db:generate": "pnpm --filter @orbita/api db:generate",
+    "db:migrate": "pnpm --filter @orbita/api db:migrate",
+    "infra:up": "docker compose up -d",
+    "infra:down": "docker compose down",
+    "infra:logs": "docker compose logs -f"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

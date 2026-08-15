@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: orbita
+          POSTGRES_PASSWORD: orbita
+          POSTGRES_DB: orbita_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U orbita"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://orbita:orbita@localhost:5432/orbita_test
+      REDIS_URL: redis://localhost:6379
+      # Valores descartáveis, só para o processo subir nos testes.
+      ENCRYPTION_KEY: dGVzdC1rZXktMzItYnl0ZXMtZm9yLWNpLW9ubHktMDAwMDA=
+      JWT_SECRET: ci-only-secret-never-used-in-production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Testes
+        run: pnpm test
+
+      # Requisito de segurança: build não passa com vulnerabilidade alta/crítica.
+      - name: Auditoria de dependências
+        run: pnpm audit --audit-level=high
+
+      - name: Verificar que nenhum .env foi commitado
+        run: |
+          if git ls-files --error-unmatch .env 2>/dev/null; then
+            echo "::error::.env está versionado — remova do git imediatamente."
+            exit 1
+          fi
+          echo "OK: nenhum .env versionado."

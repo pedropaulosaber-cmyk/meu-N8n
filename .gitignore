@@ -1,0 +1,38 @@
+# ── Segredos ──────────────────────────────────────────────────────────
+# NUNCA commitar. O .env.example é o único que vai pro repositório.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# ── Dependências e build ──────────────────────────────────────────────
+node_modules/
+dist/
+build/
+.turbo/
+*.tsbuildinfo
+
+# ── Dados locais ──────────────────────────────────────────────────────
+# Volumes do Postgres/Redis quando montados no diretório do projeto
+.data/
+backups/
+*.dump
+*.sql.gz
+
+# ── Logs ──────────────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# ── Editor / SO ───────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# ── Testes ────────────────────────────────────────────────────────────
+coverage/
